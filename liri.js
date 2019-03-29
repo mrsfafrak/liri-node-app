@@ -42,27 +42,60 @@ else if (action === "spotify-this-song") {
 else if (action === "movie-this") {
     var movie = process.argv.slice(3).join(" ");
     if (movie === "") {
-        console.log("Mr. Nobody");
-        // fill in data
+        axios.get("http://www.omdbapi.com/?t=Mr._Nobody&y=&plot=short&apikey=trilogy")
+            .then(function (response) {
+                var title = response.data.Title;
+                var year = response.data.Year;
+                var imdbRating = response.data.Ratings[0].Value;
+                var rottenRating = response.data.Ratings[1].Value;
+                var country = response.data.Country;
+                var language = response.data.Language;
+                var plot = response.data.Plot;
+                var actors = response.data.Actors;
+                console.log(chalk.bold.red("====================================="));
+                console.log(chalk.bold.red("You didn't enter a movie so here's some info on the movie Mr. Nobody:"));
+                console.log(chalk.bold("Title: ") + title);
+                console.log(chalk.bold("Year Released: ") + year);
+                console.log(chalk.bold("IMDB Rating: ") + imdbRating);
+                console.log(chalk.bold("Rotten Tomatoes Rating: ") + rottenRating);
+                console.log(chalk.bold("Country: ") + country);
+                console.log(chalk.bold("Language(s): ") + language);
+                console.log(chalk.bold("Plot Summary: ") + plot);
+                console.log(chalk.bold("Actors: ") + actors);
+                console.log(chalk.bold.red("====================================="));
+            }
+            );
     }
     else {
         axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy")
             .then(function (response) {
-                for (var i = 0; i < response.data.length; i++) {
-                    var title = response.data[i].Title;
-                    var year =response.data[i].Year;
-                    var imdbRating =response.data[i].Ratings[0].Value;
-                    var rottenRating =response.data[i].Ratings[1].Value;
-                    var country =response.data[i].Country;
-                    var language =response.data[i].Language;
-                    var plot =response.data[i].plot;
-                    var actors =response.data[i].Actors;
-                    console.log(title + year+ imbdRating+rottenRating+country+language+plot+actors);
+                if (response.data.Error === "Movie not found!") {
+                    console.log(chalk.bgRed.bold("Movie not found! Try again or check your spelling!"));
                 }
-                // console.log("The movie's rating is: " + response.data.imdbRating);
+                else {
+                    var title = response.data.Title;
+                    var year = response.data.Year;
+                    var imdbRating = response.data.Ratings[0].Value;
+                    var rottenRating = response.data.Ratings[1].Value;
+                    var country = response.data.Country;
+                    var language = response.data.Language;
+                    var plot = response.data.Plot;
+                    var actors = response.data.Actors;
+                    console.log(chalk.bold.blue("====================================="));
+                    console.log(chalk.bold.blue("Information on the movie you entered:"));
+                    console.log(chalk.bold("Title: ") + title);
+                    console.log(chalk.bold("Year Released: ") + year);
+                    console.log(chalk.bold("IMDB Rating: ") + imdbRating);
+                    console.log(chalk.bold("Rotten Tomatoes Rating: ") + rottenRating);
+                    console.log(chalk.bold("Country: ") + country);
+                    console.log(chalk.bold("Language(s): ") + language);
+                    console.log(chalk.bold("Plot Summary: ") + plot);
+                    console.log(chalk.bold("Actors: ") + actors);
+                    console.log(chalk.bold.blue("====================================="));
+                };
             }
             );
-    }
+    };
 }
 else if (action === "do-what-it-says") {
 
