@@ -29,7 +29,6 @@ if (action === "do-what-it-says") {
         }
         else if (action === "spotify-this-song") {
             song = dataArr[1];
-            // console.log(song);
             spot();
         }
         else if (action === "movie-this") {
