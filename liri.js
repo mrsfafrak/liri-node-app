@@ -6,12 +6,56 @@ var spotify = new Spotify(keys.spotify);
 var axios = require("axios");
 const chalk = require('chalk');
 var moment = require('moment');
+var fs = require("fs");
 
 var action = process.argv[2];
 
+var song;
+var movie;
+var band;
+
+// condition for if "do-what-it-says" is entered
+if (action === "do-what-it-says") {
+    fs.readFile("random.txt", "utf8", function (error, data) {
+        if (error) {
+            return console.log(error);
+        }
+        var dataArr = data.split(",");
+        var action = dataArr[0];
+
+        if (action === "concert-this") {
+            band = dataArr[1];
+            bands();
+        }
+        else if (action === "spotify-this-song") {
+            song = dataArr[1];
+            // console.log(song);
+            spot();
+        }
+        else if (action === "movie-this") {
+            movie = dataArr[1];
+            ombd();
+        }
+    });
+}
 // condition for if "concert-this" is entered (uses BandInTown API with axios)
-if (action === "concert-this") {
-    var band = process.argv.slice(3).join(" ");
+else if (action === "concert-this") {
+    band = process.argv.slice(3).join(" ");
+        bands();
+}
+// condition for if "spotify-this-song" is entered (uses Spotify API)
+else if (action === "spotify-this-song") {
+    song = process.argv.slice(3).join(" ");
+    spot();
+}
+// condition for if "movie-this" is entered (uses OMBI API with axios)
+else if (action === "movie-this") {
+    movie = process.argv.slice(3).join(" ");
+    ombd();
+}
+
+// FUNCTIONS USED ABOVE
+function bands() {
     axios.get("https://rest.bandsintown.com/artists/" + band + "/events?app_id=codingbootcamp")
         .then(function (response) {
             if (response.data == 'undefined' || response.data == "") {
@@ -31,24 +75,21 @@ if (action === "concert-this") {
                     console.log(chalk.bold("Time & Date: ") + newShowTime);
                 }
             };
-        }
-        );
+        });
 }
-// condition for if "spotify-this-song" is entered (uses Spotify API)
-else if (action === "spotify-this-song") {
-    var song = process.argv.slice(3).join(" ");
+function spot() {
     if (song === "") {
         spotify.search({ type: 'track', query: "The Sign" }, function (err, data) {
             if (err) {
                 return console.log('Error occurred: ' + err);
             }
             console.log(chalk.red.bold("You didn't put in a song so here is a classic: "));
-            console.log("===================================");
-            console.log("Artist: " + data.tracks.items[9].artists[0].name);
-            console.log("Song Name: " + data.tracks.items[9].name);
-            console.log("Preview link: " + data.tracks.items[9].preview_url);
-            console.log("Album Name: " + data.tracks.items[9].album.name);
-            console.log("===================================");
+            console.log(chalk.bold.magenta("==================================="));
+            console.log(chalk.bold("Artist: ") + data.tracks.items[9].artists[0].name);
+            console.log(chalk.bold("Song Name: ") + chalk.italic(data.tracks.items[9].name));
+            console.log(chalk.bold("Preview link: ") + data.tracks.items[9].preview_url);
+            console.log(chalk.bold("Album Name: ") + data.tracks.items[9].album.name);
+            console.log(chalk.bold.magenta("==================================="));
         });
     }
     else {
@@ -57,7 +98,7 @@ else if (action === "spotify-this-song") {
                 return console.log('Error occurred: ' + err);
             }
             for (var i = 0; i < data.tracks.items.length; i++) {
-                console.log("===================================")
+                console.log(chalk.bold.magenta("==================================="));
                 if (data.tracks.items[i].artists.length > 0) {
                     var artist = "";
                     for (var j = 0; j < data.tracks.items[i].artists.length; j++) {
@@ -67,17 +108,15 @@ else if (action === "spotify-this-song") {
                 else if (data.tracks.items[i].artists.length === 0) {
                     var artist = data.tracks.items[i].artists[0].name;
                 }
-                console.log("Artist: " + artist);
-                console.log("Song Name: " + data.tracks.items[i].name);
-                console.log("Preview link: " + data.tracks.items[i].preview_url);
-                console.log("Album Name: " + data.tracks.items[i].album.name);
+                console.log(chalk.bold("Artist: ") + artist);
+                console.log(chalk.bold("Song Name: ") + chalk.italic(data.tracks.items[i].name));
+                console.log(chalk.bold("Preview link: ") + data.tracks.items[i].preview_url);
+                console.log(chalk.bold("Album Name: ") + data.tracks.items[i].album.name);
             }
         });
     }
 }
-// condition for if "movie-this" is entered (uses OMBI API with axios)
-else if (action === "movie-this") {
-    var movie = process.argv.slice(3).join(" ");
+function ombd() {
     if (movie === "") {
         axios.get("http://www.omdbapi.com/?t=Mr._Nobody&y=&plot=short&apikey=trilogy")
             .then(function (response) {
@@ -134,12 +173,3 @@ else if (action === "movie-this") {
             );
     };
 }
-else if (action === "do-what-it-says") {
-
-
-
-
-}
-
-
-
