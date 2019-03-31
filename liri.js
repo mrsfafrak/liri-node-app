@@ -96,6 +96,7 @@ function spot() {
             if (err) {
                 return console.log('Error occurred: ' + err);
             }
+            console.log(chalk.bold.red("Results for "+song+":"));
             for (var i = 0; i < data.tracks.items.length; i++) {
                 console.log(chalk.bold.magenta("==================================="));
                 if (data.tracks.items[i].artists.length > 0) {
