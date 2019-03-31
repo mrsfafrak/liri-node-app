@@ -1,7 +1,8 @@
 // required packages
 require("dotenv").config();
-// var keys = require("./keys.js");
-// var spotify = new Spotify(keys.spotify);
+var keys = require("./keys.js");
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify(keys.spotify);
 var axios = require("axios");
 const chalk = require('chalk');
 var moment = require('moment');
@@ -33,10 +34,46 @@ if (action === "concert-this") {
         }
         );
 }
+// condition for if "spotify-this-song" is entered (uses Spotify API)
 else if (action === "spotify-this-song") {
-
-
-
+    var song = process.argv.slice(3).join(" ");
+    if (song === "") {
+        spotify.search({ type: 'track', query: "The Sign" }, function (err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+            console.log(chalk.red.bold("You didn't put in a song so here is a classic: "));
+            console.log("===================================");
+            console.log("Artist: " + data.tracks.items[9].artists[0].name);
+            console.log("Song Name: " + data.tracks.items[9].name);
+            console.log("Preview link: " + data.tracks.items[9].preview_url);
+            console.log("Album Name: " + data.tracks.items[9].album.name);
+            console.log("===================================");
+        });
+    }
+    else {
+        spotify.search({ type: 'track', query: song }, function (err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+            for (var i = 0; i < data.tracks.items.length; i++) {
+                console.log("===================================")
+                if (data.tracks.items[i].artists.length > 0) {
+                    var artist = "";
+                    for (var j = 0; j < data.tracks.items[i].artists.length; j++) {
+                        artist += data.tracks.items[i].artists[j].name + ", "
+                    }
+                }
+                else if (data.tracks.items[i].artists.length === 0) {
+                    var artist = data.tracks.items[i].artists[0].name;
+                }
+                console.log("Artist: " + artist);
+                console.log("Song Name: " + data.tracks.items[i].name);
+                console.log("Preview link: " + data.tracks.items[i].preview_url);
+                console.log("Album Name: " + data.tracks.items[i].album.name);
+            }
+        });
+    }
 }
 // condition for if "movie-this" is entered (uses OMBI API with axios)
 else if (action === "movie-this") {
