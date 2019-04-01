@@ -19,9 +19,9 @@ node liri.js spotify-this-song <song name here>
 
 Examples:
 
-![artist_example](/assets/images/concert-this_carrie.png)
+![artist_example](/assets/images/concert-this-1.png)
 
-![band_example](/assets/images/concert-this_metallica.png)
+![band_example](/assets/images/concert-this-2.png)
 
 ##### OMBD
 To look up information on a movie, use the following syntax in your command line:
