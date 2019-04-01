@@ -102,7 +102,7 @@ function spot() {
                 if (data.tracks.items[i].artists.length > 0) {
                     var artist = "";
                     for (var j = 0; j < data.tracks.items[i].artists.length; j++) {
-                        artist += data.tracks.items[i].artists[j].name + ", "
+                        artist += data.tracks.items[i].artists[j].name + " "
                     }
                 }
                 else if (data.tracks.items[i].artists.length === 0) {
