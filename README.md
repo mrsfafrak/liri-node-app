@@ -9,7 +9,7 @@ By entering specific commands in the command line, the user can employ the use o
 ##### Bands In Town
 To look up the next concerts for a band or artist, use the following syntax in your command line:
 
-     * **node liri.js concert-this <artist/band name here>**
+     node liri.js concert-this <artist/band name here>
 
 ###### Examples:
 
@@ -21,7 +21,7 @@ To look up the next concerts for a band or artist, use the following syntax in y
 ##### Spotify
 To look up information on a song, use the following syntax in your command line:
 
-     * **node liri.js spotify-this-song <song name here>**
+     node liri.js spotify-this-song <song name here>
 
 ###### Example:
 
@@ -31,7 +31,7 @@ To look up information on a song, use the following syntax in your command line:
 ##### OMBD
 To look up information on a movie, use the following syntax in your command line:
 
-     * **node liri.js movie-this <movie name here>**
+     node liri.js movie-this <movie name here>
 
 ###### Example:
 
@@ -40,7 +40,7 @@ To look up information on a movie, use the following syntax in your command line
 ##### Do What It Says
 The syntax below will take in the text from the random.txt file and process it similiarly to the commands above:
 
-     * **node liri.js do-what-it-says**
+     node liri.js do-what-it-says
 
 ###### Example:
 
